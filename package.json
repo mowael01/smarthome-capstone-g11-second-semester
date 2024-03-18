@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "@babel/preset-env": "^7.1.6",
+    "@expo/vector-icons": "^14.0.0",
     "@react-native/babel-preset": "*",
+    "@react-navigation/bottom-tabs": "^6.5.19",
     "@react-navigation/native": "^6.1.16",
     "@react-navigation/stack": "^6.3.28",
     "@types/react": "~18.2.45",
@@ -27,9 +29,11 @@
     "react-native-gesture-handler": "~2.14.0",
     "react-native-safe-area-context": "4.8.2",
     "react-native-screens": "~3.29.0",
-    "react-native-svg": "^6.2.1",
+    "react-native-svg": "14.1.0",
     "react-native-svg-charts": "^5.4.0",
-    "typescript": "^5.3.0"
+    "typescript": "^5.3.0",
+    "victory": "^37.0.0",
+    "victory-native": "^37.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
