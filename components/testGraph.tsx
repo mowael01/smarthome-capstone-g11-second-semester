@@ -14,7 +14,7 @@ export default function Graph() {
     { x: 1, y: 1 },
     { x: 1, y: 1 },
     { x: 1, y: 1 },
-  ]);
+  ]); // the graph will show this number of readings every time
 
   React.useEffect(() => {
     const intervalId = setInterval(() => {

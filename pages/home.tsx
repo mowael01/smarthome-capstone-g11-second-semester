@@ -1,6 +1,6 @@
 import { View, Text } from "react-native";
 import React from "react";
-import Graph from "../components/graph";
+import Graph from "../components/testGraph";
 
 export default function Home() {
   return (
