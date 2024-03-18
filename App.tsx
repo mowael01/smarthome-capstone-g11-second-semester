@@ -1,7 +1,8 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, Dimensions } from "react-native";
+import { StyleSheet, Text, View, Dimensions, processColor } from "react-native";
 import React from "react";
 import MyBarChart from "./components/graph";
+// import MyBarChart from "./components/graph";
 
 const data = [50, 10, 40, 95, 45, 60, 70, 30, 200, 170];
 
@@ -20,6 +21,7 @@ export default function App() {
           Smart Home Feed
         </Text>
       </View>
+      <MyBarChart />
       <StatusBar style="auto" />
     </View>
   );
