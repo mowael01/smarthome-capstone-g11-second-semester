@@ -1,21 +1,34 @@
 import React from "react";
-import { LineChart, Grid } from "react-native-svg-charts";
+import { StyleSheet, View } from "react-native";
+import { VictoryLine, VictoryChart, VictoryTheme } from "victory-native";
 
-class LineChartExample extends React.PureComponent {
-  render() {
-    const data = [
-      50, 10, 40, 95, -4, -24, 85, 91, 35, 53, -53, 24, 50, -20, -80,
-    ];
+const info = [
+  { x: 1, y: 13000 },
+  { x: 2, y: 16500 },
+  { x: 3, y: 14250 },
+];
 
-    return (
-      <LineChart
-        style={{ height: 200 }}
-        data={data}
-        svg={{ stroke: "rgb(134, 65, 244)" }}
-        contentInset={{ top: 20, bottom: 20 }}
-      >
-        <Grid />
-      </LineChart>
-    );
-  }
+export default function Graph() {
+  return (
+    <View style={styles.container}>
+      <VictoryChart theme={VictoryTheme.material}>
+        <VictoryLine
+          style={{
+            data: { stroke: "#c43a31" },
+            parent: { border: "1px solid #ccc" },
+          }}
+          data={info}
+        />
+      </VictoryChart>
+    </View>
+  );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#f5fcff",
+  },
+});
