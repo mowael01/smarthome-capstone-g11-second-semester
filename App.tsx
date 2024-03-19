@@ -17,11 +17,11 @@ export default function App() {
           component={Home}
           options={{ tabBarIcon: makeIconRender("home"), headerShown: false }}
         />
-        <Tab.Screen
+        {/* <Tab.Screen
           name="Home Map"
           component={HomeMap}
           options={{ tabBarIcon: makeIconRender("cog") }}
-        />
+        /> */}
         <Tab.Screen
           name="Syncing"
           component={Syncing}

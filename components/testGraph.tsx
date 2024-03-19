@@ -1,12 +1,12 @@
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
+import { Background } from "victory";
 import {
   VictoryLine,
   VictoryChart,
   VictoryTheme,
-  VictoryLabel,
-  VictoryVoronoiContainer,
-  VictoryContainer,
+  VictoryAxis,
+  LineSegment,
 } from "victory-native";
 
 export default function Graph() {
@@ -56,9 +56,20 @@ export default function Graph() {
             }}
             data={info}
             interpolation={"natural"}
-            // domainPadding={{ x: [2, -2] }}
-            // animate={}
             labels={({ datum }) => datum.y}
+          />
+          <VictoryAxis
+            dependentAxis
+            style={{ grid: { stroke: "transparent" } }}
+          />
+          <VictoryAxis
+            orientation="bottom"
+            style={{
+              // axis: { stroke: "transparent" },
+              ticks: { stroke: "transparent" },
+              tickLabels: { fill: "transparent" },
+              grid: { stroke: "transparent" },
+            }}
           />
         </VictoryChart>
       </View>
