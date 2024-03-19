@@ -1,4 +1,3 @@
-import { Text, View } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -13,7 +12,7 @@ export default function App() {
         <Tab.Screen
           name="Home"
           component={Home}
-          options={{ tabBarIcon: makeIconRender("home") }}
+          options={{ tabBarIcon: makeIconRender("home"), headerShown: false }}
         />
         {/* <Tab.Screen
           name="Settings"
