@@ -9,7 +9,7 @@ import {
   LineSegment,
 } from "victory-native";
 
-export default function Graph() {
+export default function Graph(props) {
   const [graph1Counter, setGraph1Counter] = React.useState(2);
   const [info, setInfo] = React.useState([
     { x: 0, y: 0 }, //0
@@ -64,7 +64,7 @@ export default function Graph() {
               alignItems: "center",
             }}
           >
-            <Text style={{ fontSize: 30 }}>Temperature</Text>
+            <Text style={{ fontSize: 30 }}>{props.name}</Text>
           </View>
           <VictoryLine
             domain={{ y: [0, 11], x: [0, 10] }}
@@ -99,12 +99,12 @@ export default function Graph() {
           >
             <View>
               <Text style={{ fontSize: 15 }}>
-                Current Temperature: {info[8].y} &#8451;
+                Current {props.name}: {info[8].y} &#8451;
               </Text>
             </View>
             <View>
               <Text style={{ fontSize: 15 }}>
-                Average Temperature :{" "}
+                Average {props.name} :{" "}
                 {(
                   info.reduce((acc, cur) => acc + cur.y, 0) / info.length
                 ).toFixed(2)}
