@@ -7,7 +7,6 @@ export default function Home() {
     <View style={{ marginTop: 25 }}>
       <Text>home</Text>
       <View style={styles.graph}>
-        <Text>Temperature</Text>
         <Graph />
       </View>
     </View>

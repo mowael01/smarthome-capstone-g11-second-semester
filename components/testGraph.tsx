@@ -47,7 +47,25 @@ export default function Graph() {
   return (
     <View style={styles.container}>
       <View style={{}}>
-        <VictoryChart theme={VictoryTheme.material}>
+        <VictoryChart
+          style={{
+            parent: {
+              backgroundColor: "#eee",
+              padding: 0,
+              height: 50,
+              display: "flex",
+            },
+          }}
+          theme={VictoryTheme.material}
+        >
+          <View
+            style={{
+              width: "100%",
+              alignItems: "center",
+            }}
+          >
+            <Text style={{ fontSize: 30 }}>Temperature</Text>
+          </View>
           <VictoryLine
             domain={{ y: [0, 11], x: [0, 10] }}
             style={{
@@ -71,10 +89,30 @@ export default function Graph() {
               grid: { stroke: "transparent" },
             }}
           />
+          <View
+            style={{
+              marginTop: "75%",
+              marginStart: 5,
+              marginEnd: 5,
+              alignItems: "flex-start",
+            }}
+          >
+            <View>
+              <Text style={{ fontSize: 15 }}>
+                Current Temperature: {info[8].y} &#8451;
+              </Text>
+            </View>
+            <View>
+              <Text style={{ fontSize: 15 }}>
+                Average Temperature :{" "}
+                {(
+                  info.reduce((acc, cur) => acc + cur.y, 0) / info.length
+                ).toFixed(2)}
+                &#8451;
+              </Text>
+            </View>
+          </View>
         </VictoryChart>
-      </View>
-      <View>
-        <Text style={{ fontSize: 20 }}>Current Temperature: {info[8].y}</Text>
       </View>
     </View>
   );
