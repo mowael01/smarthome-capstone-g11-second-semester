@@ -99,7 +99,8 @@ export default function Graph(props) {
           >
             <View>
               <Text style={{ fontSize: 15 }}>
-                Current {props.name}: {info[8].y} &#8451;
+                Current {props.name}: {info[8].y}
+                {props.unit}
               </Text>
             </View>
             <View>
@@ -108,7 +109,7 @@ export default function Graph(props) {
                 {(
                   info.reduce((acc, cur) => acc + cur.y, 0) / info.length
                 ).toFixed(2)}
-                &#8451;
+                {props.unit}
               </Text>
             </View>
           </View>
