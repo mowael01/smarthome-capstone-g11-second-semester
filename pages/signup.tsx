@@ -18,14 +18,9 @@ import { FireStoreDB } from "../firebaseConfig";
 const window = Dimensions.get("window");
 export default function Login({ navigation: { navigate } }) {
   const [userName, setUserName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [selectedId, setSelectedId] = useState();
-  const [date, setDate] = useState(new Date());
-  const [checked, setChecked] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [health, setHealth] = useState([]);
-  const [address, setAddress] = useState("");
+
   const newUser = async () => {
     try {
       const responce = await createUserWithEmailAndPassword(
@@ -38,10 +33,6 @@ export default function Login({ navigation: { navigate } }) {
         name: userName,
         email: email.toLocaleLowerCase(),
         password: password,
-        birth: date,
-        phone: phone,
-        sex: selectedId,
-        health: health,
       });
       FileSystem.writeAsStringAsync(
         "../assets/databases/user.txt",
@@ -55,11 +46,6 @@ export default function Login({ navigation: { navigate } }) {
 
   return (
     <SafeAreaView style={{ flex: 1, marginTop: 28, backgroundColor: "white" }}>
-      <ImageBackground source={require("../assets/images/darkGround.jpg")}>
-        <View style={styles.header}>
-          <Text style={styles.headerText}>Welcome To CareMate</Text>
-        </View>
-      </ImageBackground>
       <ScrollView contentContainerStyle={styles.form}>
         <View style={styles.field}>
           <Text style={styles.fieldText}>اكتب اسمك</Text>
