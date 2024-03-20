@@ -1,44 +1,20 @@
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import React from "react";
+import "react-native-gesture-handler";
 import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Home from "./pages/home";
-import HomeMap from "./pages/homeMap";
-import Settings from "./pages/settings";
-import Syncing from "./pages/syncing";
-
-const Tab = createBottomTabNavigator();
-
+import LoginStack from "./routers/LoginStack";
+import { onAuthStateChanged } from "firebase/auth";
+import { FirebaseAUTH } from "./firebaseConfig";
+import HomeStack from "./routers/HomeStack";
 export default function App() {
+  const [user, setUser] = React.useState<Object>();
+  React.useEffect(() => {
+    onAuthStateChanged(FirebaseAUTH, (user) => {
+      setUser(user);
+    });
+  }, []);
   return (
     <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen
-          name="Home"
-          component={Home}
-          options={{ tabBarIcon: makeIconRender("home"), headerShown: false }}
-        />
-        {/* <Tab.Screen
-          name="Home Map"
-          component={HomeMap}
-          options={{ tabBarIcon: makeIconRender("cog") }}
-        /> */}
-        <Tab.Screen
-          name="Syncing"
-          component={Syncing}
-          options={{ tabBarIcon: makeIconRender("cog") }}
-        />
-        <Tab.Screen
-          name="Settings"
-          component={Settings}
-          options={{ tabBarIcon: makeIconRender("cog") }}
-        />
-      </Tab.Navigator>
+      {user ? <HomeStack /> : <LoginStack />}
     </NavigationContainer>
-  );
-}
-
-function makeIconRender(name) {
-  return ({ color, size }) => (
-    <MaterialCommunityIcons name={name} color={color} size={size} />
   );
 }
