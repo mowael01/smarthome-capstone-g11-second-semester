@@ -1,44 +1,47 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { StyleSheet, View, Text } from "react-native";
-import { Background } from "victory";
 import {
   VictoryLine,
   VictoryChart,
   VictoryTheme,
   VictoryAxis,
 } from "victory-native";
-import { ref, onValue } from "firebase/database";
+import { ref, onValue, getDatabase } from "firebase/database";
 import { Database } from "../firebaseConfig";
 import { getAuth } from "firebase/auth";
-
 export default function Graph(props) {
-  const userEmail = getAuth().currentUser.email;
+  const userEmail = getAuth().currentUser.email.slice(0, -4);
   const [graph1Counter, setGraph1Counter] = React.useState(2);
   const [info, setInfo] = React.useState([
-    { x: 0, y: 0 }, //0
+    { x: 0, y: 1 }, //0
     { x: 1, y: 1 }, //1
-    { x: 1, y: 1 }, //2
-    { x: 1, y: 1 }, //3
-    { x: 1, y: 1 }, //4
-    { x: 1, y: 1 }, //5
-    { x: 1, y: 1 }, //6
-    { x: 1, y: 1 }, //7
-    { x: 1, y: 1 }, //8
+    { x: 2, y: 1 }, //2
+    { x: 3, y: 1 }, //3
+    { x: 4, y: 1 }, //4
+    { x: 5, y: 1 }, //5
+    { x: 6, y: 1 }, //6
+    { x: 7, y: 1 }, //7
+    { x: 8, y: 1 }, //8
   ]); // the graph will show this number of readings every time
 
-  // React.useEffect(() => {
-  //   const starCountRef = ref(Database, userEmail + "homeData" + props.database);
-  //   onValue(starCountRef, (snapshot) => {
-  //     const data = snapshot.val();
-  //     console.log(data);
-  //   });
-  // }, [graph1Counter, info]);
-
-  const starCountRef = ref(Database, userEmail + "homeData" + props.database);
-  onValue(starCountRef, (snapshot) => {
-    const data = snapshot.val();
-    console.log(data);
-  });
+  React.useEffect(() => {
+    const starCountRef = ref(getDatabase(), "/test/TemperatureC"); // userEmail + "/homeData/" + props.database
+    onValue(starCountRef, (snapshot) => {
+      const data = snapshot.val();
+      console.log(data);
+      let updatedInfo = [...info.slice(1), { x: 9, y: data }];
+      updatedInfo.map((info) => {
+        {
+          info.x--;
+          return info;
+        }
+      });
+      setInfo(updatedInfo);
+      setGraph1Counter((prevCounter) =>
+        prevCounter >= 8 ? 0 : prevCounter + 1
+      );
+    });
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -63,7 +66,7 @@ export default function Graph(props) {
             <Text style={{ fontSize: 30 }}>{props.name}</Text>
           </View>
           <VictoryLine
-            domain={{ y: [0, 11], x: [0, 10] }}
+            domain={{ y: [0, 40], x: [0, 10] }}
             style={{
               data: { stroke: "#c43a31" },
               parent: { border: "3px solid #727272" },

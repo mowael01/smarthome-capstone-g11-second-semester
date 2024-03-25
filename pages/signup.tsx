@@ -5,17 +5,13 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  ImageBackground,
   ScrollView,
 } from "react-native";
-import React, { useState, useMemo } from "react";
-import * as FileSystem from "expo-file-system";
-import { Dimensions } from "react-native";
+import React, { useState } from "react";
+
 import { FirebaseAUTH } from "../firebaseConfig";
-import { addDoc, setDoc, doc } from "firebase/firestore";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { FireStoreDB } from "../firebaseConfig";
-const window = Dimensions.get("window");
+
 export default function Login({ navigation: { navigate } }) {
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
@@ -29,15 +25,6 @@ export default function Login({ navigation: { navigate } }) {
         password
       );
       console.log(responce);
-      await setDoc(doc(FireStoreDB, "usersData", email.toLocaleLowerCase()), {
-        name: userName,
-        email: email.toLocaleLowerCase(),
-        password: password,
-      });
-      FileSystem.writeAsStringAsync(
-        "../assets/databases/user.txt",
-        email.toLocaleLowerCase()
-      );
       alert("sucess");
     } catch (error) {
       alert(error);
