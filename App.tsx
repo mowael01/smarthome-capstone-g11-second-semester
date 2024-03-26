@@ -14,7 +14,7 @@ export default function App() {
   }, []);
   return (
     <NavigationContainer>
-      {user ? <HomeStack /> : <LoginStack />}
+      {user ? <HomeStack /> : <HomeStack />}
     </NavigationContainer>
   );
 }

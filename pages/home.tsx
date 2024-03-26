@@ -8,8 +8,8 @@ export default function Home() {
       <Text>home</Text>
       <View style={styles.graph}>
         <ScrollView style={{ marginBottom: 40 }}>
-          <Graph name="temperature" unit="&deg;C" database="temp" />
-          <Graph name="humidity" unit="%" database="humidity" />
+          <Graph name="TemperatureC" unit="&deg;C" database="TemperatureC" />
+          <Graph name="Humidity" unit="%" database="Humidity" />
           {/* <Graph name="gas" unit="ppm" /> */}
         </ScrollView>
       </View>

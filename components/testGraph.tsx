@@ -10,17 +10,19 @@ import { ref, get } from "firebase/database";
 import { Database } from "../firebaseConfig";
 import { getAuth } from "firebase/auth";
 export default function Graph(props) {
-  const userEmail = getAuth().currentUser.email.slice(0, -4);
+  // const userEmail = getAuth().currentUser.email.slice(0, -4);
   const [info, setInfo] = React.useState([
-    { x: 1, y: 1 }, //0
-    { x: 2, y: 1 }, //1
-    { x: 3, y: 1 }, //2
-    { x: 4, y: 1 }, //3
-    { x: 5, y: 1 }, //4
-    { x: 6, y: 1 }, //5
+    { x: 0, y: 1 }, //0
+    { x: 1, y: 1 }, //1
+    { x: 2, y: 1 }, //2
+    { x: 3, y: 1 }, //3
+    { x: 4, y: 1 }, //4
+    { x: 5, y: 1 }, //5
   ]); // the graph will show this number of readings every time
-  const dataRef = ref(Database, "/test/TemperatureC"); // userEmail + "/homeData/" + props.database
-
+  const [maxValue, setMaxValue] = React.useState(10);
+  const [minValue, setMinValue] = React.useState(0);
+  const dataRef = ref(Database, "/test/" + props.database); // userEmail + "/homeData/" + props.database
+  // getting the data from the database every 1 second
   React.useEffect(() => {
     setTimeout(async () => {
       get(dataRef)
@@ -41,7 +43,7 @@ export default function Graph(props) {
         console.log("No data available");
       }
       // Create a new array with updated data
-      let updatedInfo = [...info.slice(1), { x: 7, y: data.val() }];
+      let updatedInfo = [...info.slice(1), { x: 6, y: data.val() }];
 
       updatedInfo = updatedInfo.map((info) => {
         {
@@ -52,6 +54,8 @@ export default function Graph(props) {
       console.log("====================================");
       console.log(updatedInfo);
       console.log("====================================");
+      setMaxValue(info.reduce);
+      setMinValue(data.val() < maxValue ? data.val() : minValue);
       setInfo(updatedInfo);
       // setGraph1Counter((prevCounter) =>
       //   prevCounter >= 8 ? 0 : prevCounter + 1
@@ -65,7 +69,7 @@ export default function Graph(props) {
           style={{
             parent: {
               backgroundColor: "#eee",
-              padding: 0,
+              padding: 10,
               height: 50,
               display: "flex",
             },
@@ -81,18 +85,22 @@ export default function Graph(props) {
             <Text style={{ fontSize: 30 }}>{props.name}</Text>
           </View>
           <VictoryLine
-            domain={{ y: [0, 40], x: [0, 7] }}
+            domain={{ y: [minValue - 5, maxValue + 5], x: [0, 7] }}
             style={{
               data: { stroke: "#c43a31" },
-              parent: { border: "3px solid #727272" },
+              // parent: { border: "3px solid #727272" },
             }}
             data={info}
-            interpolation={"natural"}
-            labels={({ datum }) => datum.y}
+            // interpolation={"natural"}
+            labels={({ datum }) => datum.y.toFixed(1)}
+            animate={{
+              duration: 2000,
+              onLoad: { duration: 1000 },
+            }}
           />
           <VictoryAxis
             dependentAxis
-            style={{ grid: { stroke: "transparent" } }}
+            style={{ grid: { stroke: "transparent", zIndex: -1 } }}
           />
           <VictoryAxis
             orientation="bottom"
