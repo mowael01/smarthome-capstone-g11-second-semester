@@ -9,7 +9,19 @@ import {
 import { ref, get } from "firebase/database";
 import { Database } from "../firebaseConfig";
 import { getAuth } from "firebase/auth";
+import * as Notifications from "expo-notifications";
 export default function Graph(props) {
+  async function sendPushNotification(title, body) {
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: title,
+        body: body,
+        data: { data: "goes here" }
+      },
+      trigger: null
+    });
+  }
+  // sendPushNotification("hi", "all is right");
   // const userEmail = getAuth().currentUser.email.slice(0, -4);
   const [info, setInfo] = React.useState([
     { x: 0, y: 1 }, //0
@@ -68,6 +80,12 @@ export default function Graph(props) {
         }).y
       );
       setInfo(updatedInfo);
+      if (updatedInfo[5].y > props.maximumValue) {
+        sendPushNotification(
+          props.maximumValueMessage.title,
+          props.maximumValueMessage.body
+        );
+      }
     }, 1000); // Changed to 1000 milliseconds for 1 second intervals
   }, [info]);
   return (
