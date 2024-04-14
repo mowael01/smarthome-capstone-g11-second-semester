@@ -1,13 +1,5 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// Optionally import the services that you want to use
-import { getAuth, inMemoryPersistence, setPersistence } from "firebase/auth";
-// import {...} from "firebase/database";
-import { getDatabase } from "firebase/database";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+import * as firebase from "firebase/compat";
+
 const firebaseConfig = {
   apiKey: "AIzaSyCHku9uPpvizJnBZNZCGZWXhEGWmFZtfDs",
   authDomain: "smart-home-bbcc3.firebaseapp.com",
@@ -16,12 +8,14 @@ const firebaseConfig = {
   messagingSenderId: "280217500857",
   appId: "1:280217500857:web:70e5df9abca5c31660ef68",
   measurementId: "G-G97B311M2H",
-  databaseURL: "https://smart-home-bbcc3-default-rtdb.firebaseio.com/",
+  databaseURL: "https://smart-home-bbcc3-default-rtdb.firebaseio.com/"
 };
 
-// Initialize Firebase
-export const FirebaseApp = initializeApp(firebaseConfig);
-export const FirebaseAUTH = getAuth(FirebaseApp);
-setPersistence(FirebaseAUTH, inMemoryPersistence);
-// Initialize Realtime Database and get a reference to the service
-export const Database = getDatabase(FirebaseApp);
+// // Initialize Firebase
+
+export const FirebaseApp =
+  firebase.default.apps.length === 0
+    ? firebase.default.initializeApp(firebaseConfig)
+    : firebase.default.app();
+export const FirebaseAUTH = firebase.default.auth();
+export const Database = firebase.default.database();

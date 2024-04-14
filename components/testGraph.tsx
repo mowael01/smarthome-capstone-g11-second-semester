@@ -4,7 +4,7 @@ import {
   VictoryLine,
   VictoryChart,
   VictoryTheme,
-  VictoryAxis,
+  VictoryAxis
 } from "victory-native";
 import { ref, get } from "firebase/database";
 import { Database } from "../firebaseConfig";
@@ -17,7 +17,7 @@ export default function Graph(props) {
     { x: 2, y: 1 }, //2
     { x: 3, y: 1 }, //3
     { x: 4, y: 1 }, //4
-    { x: 5, y: 1 }, //5
+    { x: 5, y: 1 } //5
   ]); // the graph will show this number of readings every time
   const [maxValue, setMaxValue] = React.useState(10);
   const [minValue, setMinValue] = React.useState(0);
@@ -54,12 +54,20 @@ export default function Graph(props) {
       console.log("====================================");
       console.log(updatedInfo);
       console.log("====================================");
-      setMaxValue(info.reduce);
-      setMinValue(data.val() < maxValue ? data.val() : minValue);
+      const max = info.reduce((prevE, CurrE) => {
+        return { x: 0, y: Math.max(prevE.y, CurrE.y) };
+      });
+      setMaxValue(
+        info.reduce((prevE, CurrE) => {
+          return { x: 0, y: Math.max(prevE.y, CurrE.y) };
+        }).y
+      );
+      setMinValue(
+        info.reduce((prevE, CurrE) => {
+          return { x: 0, y: Math.min(prevE.y, CurrE.y) };
+        }).y
+      );
       setInfo(updatedInfo);
-      // setGraph1Counter((prevCounter) =>
-      //   prevCounter >= 8 ? 0 : prevCounter + 1
-      // );
     }, 1000); // Changed to 1000 milliseconds for 1 second intervals
   }, [info]);
   return (
@@ -71,32 +79,35 @@ export default function Graph(props) {
               backgroundColor: "#eee",
               padding: 10,
               height: 50,
-              display: "flex",
-            },
+              display: "flex"
+            }
           }}
           theme={VictoryTheme.material}
         >
           <View
             style={{
               width: "100%",
-              alignItems: "center",
+              alignItems: "center"
             }}
           >
             <Text style={{ fontSize: 30 }}>{props.name}</Text>
           </View>
           <VictoryLine
-            domain={{ y: [minValue - 5, maxValue + 5], x: [0, 7] }}
+            domain={{
+              y: [minValue - minValue * 0.1, maxValue + maxValue * 0.1],
+              x: [0, 7]
+            }}
             style={{
-              data: { stroke: "#c43a31" },
+              data: { stroke: "#c43a31" }
               // parent: { border: "3px solid #727272" },
             }}
             data={info}
             // interpolation={"natural"}
             labels={({ datum }) => datum.y.toFixed(1)}
-            animate={{
-              duration: 2000,
-              onLoad: { duration: 1000 },
-            }}
+            // animate={{
+            //   duration: 2000,
+            //   onLoad: { duration: 1000 }
+            // }}
           />
           <VictoryAxis
             dependentAxis
@@ -108,7 +119,7 @@ export default function Graph(props) {
               // axis: { stroke: "transparent" },
               ticks: { stroke: "transparent" },
               tickLabels: { fill: "transparent" },
-              grid: { stroke: "transparent" },
+              grid: { stroke: "transparent" }
             }}
           />
           <View
@@ -116,7 +127,7 @@ export default function Graph(props) {
               marginTop: "75%",
               marginStart: 5,
               marginEnd: 5,
-              alignItems: "flex-start",
+              alignItems: "flex-start"
             }}
           >
             <View>
@@ -145,6 +156,6 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     justifyContent: "space-between",
-    alignItems: "center",
-  },
+    alignItems: "center"
+  }
 });

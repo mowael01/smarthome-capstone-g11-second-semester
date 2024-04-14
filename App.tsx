@@ -5,7 +5,10 @@ import LoginStack from "./routers/LoginStack";
 import HomeStack from "./routers/HomeStack";
 import { onAuthStateChanged } from "firebase/auth";
 import { FirebaseAUTH } from "./firebaseConfig";
+import * as auth from "firebase/auth/dist/compat";
 export default function App() {
+  //initializing the notifications
+
   const [user, setUser] = React.useState<Object>();
   React.useEffect(() => {
     onAuthStateChanged(FirebaseAUTH, (user) => {
@@ -14,7 +17,7 @@ export default function App() {
   }, []);
   return (
     <NavigationContainer>
-      {user ? <HomeStack /> : <HomeStack />}
+      {user ? <HomeStack /> : <LoginStack />}
     </NavigationContainer>
   );
 }
