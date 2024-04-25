@@ -1,11 +1,11 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "../pages/home";
 import HomeMap from "../pages/homeMap";
 import Settings from "../pages/settings";
 import Syncing from "../pages/syncing";
 
-const Tab = createBottomTabNavigator();
+const Tab = createNativeStackNavigator();
 
 export default function App() {
   return (
@@ -13,7 +13,7 @@ export default function App() {
       <Tab.Screen
         name="Home"
         component={Home}
-        options={{ tabBarIcon: makeIconRender("home"), headerShown: false }}
+        options={{ headerShown: false }}
       />
       {/* <Tab.Screen
           name="Home Map"
@@ -23,12 +23,12 @@ export default function App() {
       <Tab.Screen
         name="Syncing"
         component={Syncing}
-        options={{ tabBarIcon: makeIconRender("cog") }}
+        // options={{ tabBarIcon: makeIconRender("cog"/) }}
       />
       <Tab.Screen
         name="Settings"
         component={Settings}
-        options={{ tabBarIcon: makeIconRender("cog") }}
+        // options={{ tabBarIcon: makeIconRender("cog") }}
       />
     </Tab.Navigator>
   );
