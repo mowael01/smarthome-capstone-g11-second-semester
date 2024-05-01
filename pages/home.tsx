@@ -9,6 +9,7 @@ import React from "react";
 import Graph from "../components/testGraph";
 import { Database } from "../firebaseConfig";
 import * as Notifications from "expo-notifications";
+
 import { get, ref } from "firebase/database";
 
 //Synced data components of firebase
@@ -54,7 +55,7 @@ const Data = (props) => {
 
         setAvg(
           updatedInfo.reduce((accumulator, current, index) => {
-            console.log(accumulator);
+            // console.log(accumulator);
             if (index === 0) {
               return current.y;
             } else {
@@ -62,7 +63,7 @@ const Data = (props) => {
             }
           }, 0)
         );
-        console.log(`avg: ${avg}`);
+        // console.log(`avg: ${avg}`);
         if (updatedInfo[5].y > props.maximumValue) {
           sendPushNotification(
             props.maximumValueMessage.title,
@@ -189,7 +190,12 @@ export default function Home({ navigation }) {
             flexWrap: "wrap",
           }}
         >
-          <TouchableOpacity style={styles.featuresElement}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("Temperature");
+            }}
+            style={styles.featuresElement}
+          >
             <Text style={styles.featuresElementText}>Temperature</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.featuresElement}>

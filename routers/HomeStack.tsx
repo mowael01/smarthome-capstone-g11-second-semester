@@ -4,6 +4,7 @@ import Home from "../pages/home";
 import HomeMap from "../pages/homeMap";
 import Settings from "../pages/settings";
 import Syncing from "../pages/syncing";
+import Temperature from "../pages/temperature";
 
 const Tab = createNativeStackNavigator();
 
@@ -15,11 +16,11 @@ export default function App() {
         component={Home}
         options={{ headerShown: false }}
       />
-      {/* <Tab.Screen
-          name="Home Map"
-          component={HomeMap}
-          options={{ tabBarIcon: makeIconRender("cog") }}
-        /> */}
+      <Tab.Screen
+        name="Temperature"
+        component={Temperature}
+        // options={{ headerShown: false }}
+      />
       <Tab.Screen
         name="Syncing"
         component={Syncing}
