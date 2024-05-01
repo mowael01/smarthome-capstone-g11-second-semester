@@ -5,9 +5,7 @@ import LoginStack from "./routers/LoginStack";
 import HomeStack from "./routers/HomeStack";
 import { onAuthStateChanged } from "firebase/auth";
 import { FirebaseAUTH } from "./firebaseConfig";
-import * as auth from "firebase/auth/dist/compat";
 import * as Notifications from "expo-notifications";
-import * as Device from "expo-device";
 import Constants from "expo-constants"; // Optional
 import { Platform } from "react-native";
 
@@ -15,8 +13,8 @@ Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
     shouldPlaySound: true,
-    shouldSetBadge: true
-  })
+    shouldSetBadge: true,
+  }),
 });
 async function registerForPushNotificationsAsync() {
   let token;
@@ -46,7 +44,7 @@ async function registerForPushNotificationsAsync() {
       sound: "",
       lightColor: "#FF231F7C",
       lockscreenVisibility: Notifications.AndroidNotificationVisibility.PUBLIC,
-      bypassDnd: true
+      bypassDnd: true,
     });
   }
 

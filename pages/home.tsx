@@ -3,12 +3,91 @@ import {
   Text,
   StyleSheet,
   SafeAreaView,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 import React from "react";
 import Graph from "../components/testGraph";
-
+import { Database } from "../firebaseConfig";
 import * as Notifications from "expo-notifications";
+import { get, ref } from "firebase/database";
+
+//Synced data components of firebase
+const Data = (props) => {
+  async function sendPushNotification(title, body) {
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: title,
+        body: body,
+        data: { data: "goes here" },
+      },
+      trigger: null,
+    });
+  }
+  // sendPushNotification("hi", "all is right");
+  // const userEmail = getAuth().currentUser.email.slice(0, -4);
+  const [avg, setAvg] = React.useState(0);
+  const [info, setInfo] = React.useState([
+    { x: 0, y: 1 }, //0
+    { x: 1, y: 1 }, //1
+    { x: 2, y: 1 }, //2
+    { x: 3, y: 1 }, //3
+    { x: 4, y: 1 }, //4
+    { x: 5, y: 1 }, //5
+  ]); // the data component will take the average of the lst 6 readings
+  const dataRef = ref(Database, "/test/" + props.database); // userEmail + "/homeData/" + props.database
+  // getting the data from the database every 1 second
+  React.useEffect(() => {
+    setTimeout(async () => {
+      const data = await get(dataRef);
+      // Create a new array with updated data
+      if (data.exists()) {
+        let updatedInfo = [...info.slice(1), { x: 6, y: data.val() }];
+        updatedInfo = updatedInfo.map((info) => {
+          {
+            info.x--;
+            return info;
+          }
+        });
+
+        setInfo(updatedInfo);
+        // console.log(`info: ${updatedInfo.map((x) => x.y)}`);
+
+        setAvg(
+          updatedInfo.reduce((accumulator, current, index) => {
+            console.log(accumulator);
+            if (index === 0) {
+              return current.y;
+            } else {
+              return (accumulator + current.y) / 2;
+            }
+          }, 0)
+        );
+        console.log(`avg: ${avg}`);
+        if (updatedInfo[5].y > props.maximumValue) {
+          sendPushNotification(
+            props.maximumValueMessage.title,
+            props.maximumValueMessage.body
+          );
+        }
+      }
+    }, 2000); // Changed to 1000 milliseconds for 1 second intervals
+  }, [info]);
+  return (
+    <View style={styles.summaryElement}>
+      <Text
+        style={{
+          padding: 5,
+          color: "white",
+          fontSize: 25,
+        }}
+      >
+        {avg.toFixed(2)}
+        {props.unit}
+      </Text>
+      <Text style={{ color: "white" }}>Avg House Temp</Text>
+    </View>
+  );
+};
 
 export default function Home({ navigation }) {
   const [OTemperature, setOTemperature] = React.useState(0);
@@ -19,9 +98,9 @@ export default function Home({ navigation }) {
       content: {
         title: "this is a notification from the home page",
         body: "Here is the notification body",
-        data: { data: "goes here" }
+        data: { data: "goes here" },
       },
-      trigger: { seconds: 1 }
+      trigger: { seconds: 1 },
     });
   }
   // schedulePushNotification();
@@ -36,6 +115,7 @@ export default function Home({ navigation }) {
     .catch((err) => {
       console.log(err);
     });
+
   return (
     <SafeAreaView style={{ marginTop: 25, alignItems: "center" }}>
       <View style={styles.sectionContainer}>
@@ -51,51 +131,45 @@ export default function Home({ navigation }) {
             overflow: "hidden",
             justifyContent: "space-between",
             flexDirection: "row",
-            flexWrap: "wrap"
+            flexWrap: "wrap",
           }}
         >
+          <Data
+            maximumValue={30}
+            maximumValueMessage={{
+              title: "الجو حر اويييي",
+              body: "شغل التكييف يسطا ولا المروحة هنمووت",
+            }}
+            unit="&deg;C"
+            database="TemperatureC"
+          />
           <View style={styles.summaryElement}>
             <Text
               style={{
                 padding: 5,
                 color: "white",
-                fontSize: 25
-              }}
-            >
-              {temperature}&deg;C
-            </Text>
-            <Text style={{ color: "white" }}>Avg House Temp</Text>
-          </View>
-          <View style={styles.summaryElement}>
-            <Text
-              style={{
-                padding: 5,
-                color: "white",
-                fontSize: 25
+                fontSize: 25,
               }}
             >
               {OTemperature}&deg;C
             </Text>
             <Text style={{ color: "white" }}>Outside Temp</Text>
           </View>
+          <Data
+            maximumValueMessage={{
+              title: "الجو رطب اوي",
+              body: "هنمووووت",
+            }}
+            maximumValue={80}
+            database="Humidity"
+            unit="%"
+          />
           <View style={styles.summaryElement}>
             <Text
               style={{
                 padding: 5,
                 color: "white",
-                fontSize: 25
-              }}
-            >
-              {temperature} %
-            </Text>
-            <Text style={{ color: "white" }}>Avg House Humidity</Text>
-          </View>
-          <View style={styles.summaryElement}>
-            <Text
-              style={{
-                padding: 5,
-                color: "white",
-                fontSize: 25
+                fontSize: 25,
               }}
             >
               {OHumi} %
@@ -112,7 +186,7 @@ export default function Home({ navigation }) {
           style={{
             width: 310,
             flexDirection: "row",
-            flexWrap: "wrap"
+            flexWrap: "wrap",
           }}
         >
           <TouchableOpacity style={styles.featuresElement}>
@@ -137,7 +211,7 @@ export default function Home({ navigation }) {
           style={{
             width: 310,
             flexDirection: "row",
-            flexWrap: "wrap"
+            flexWrap: "wrap",
           }}
         ></View>
       </View>
@@ -186,7 +260,7 @@ const styles = StyleSheet.create({
   // }
   sectionContainer: {
     marginHorizontal: 25,
-    paddingVertical: 10
+    paddingVertical: 10,
   },
   summaryElement: {
     backgroundColor: "#155693",
@@ -195,7 +269,7 @@ const styles = StyleSheet.create({
     marginBottom: 2,
     flexDirection: "column",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   featuresContainer: { flexDirection: "row", width: 310 },
   featuresElement: {
@@ -203,7 +277,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 15,
-    margin: 5
+    margin: 5,
   },
-  featuresElementText: { fontSize: 18, color: "white" }
+  featuresElementText: { fontSize: 18, color: "white" },
 });
