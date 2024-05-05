@@ -61,7 +61,7 @@ export default function App() {
   registerForPushNotificationsAsync();
   return (
     <NavigationContainer>
-      {user ? <HomeStack /> : <LoginStack />}
+      {user ? <HomeStack /> : <HomeStack />}
     </NavigationContainer>
   );
 }
