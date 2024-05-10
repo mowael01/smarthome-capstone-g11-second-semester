@@ -35,6 +35,7 @@ const Data = (props) => {
     { x: 4, y: 1 }, //4
     { x: 5, y: 1 }, //5
   ]); // the data component will take the average of the lst 6 readings
+  // @ts-ignore
   const dataRef = ref(Database, "/test/" + props.database); // userEmail + "/homeData/" + props.database
   // getting the data from the database every 1 second
   React.useEffect(() => {
