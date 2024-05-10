@@ -11,7 +11,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "smarthome"
@@ -30,6 +32,9 @@
       "eas": {
         "projectId": "fab4cf7e-080c-4d2c-a5dd-acd4782d703e"
       }
-    }
+    },
+    "plugins": [
+      "expo-font"
+    ]
   }
 }
