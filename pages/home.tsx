@@ -260,11 +260,6 @@ export default function Home({ navigation }) {
   );
 }
 const styles = StyleSheet.create({
-  // graph: {
-  //   width: "100%",
-  //   alignItems: "center"
-  //   // flex: 1,
-  // }
   sectionContainer: {
     marginHorizontal: 25,
     paddingVertical: 10,

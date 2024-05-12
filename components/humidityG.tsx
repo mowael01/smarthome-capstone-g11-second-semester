@@ -109,10 +109,10 @@ export default function ComparativeGraph(props) {
 
 
   ]);
-  const [graphDomain, setGraphDomain] = React.useState({ y: [0, 40], x: [0, 23] })
+  const [graphDomain, setGraphDomain] = React.useState({ y: [0, 100], x: [0, 23] })
   const [graphTickCount, setGraphTickCount] = React.useState({ x: 6, y: 10 })
   // @ts-ignore
-  const dataRef = ref(Database, "/devices/abc123/gas/day"); // userEmail + "/homeData/" + props.database
+  const dataRef = ref(Database, "/devices/abc123/humidity/day"); // userEmail + "/homeData/" + props.database
   React.useEffect(() => {
     get(dataRef)
       .then(data => {
@@ -155,7 +155,7 @@ export default function ComparativeGraph(props) {
   React.useEffect(() => {
     setTimeout(async () => {
       // @ts-ignore
-      const data = await get(ref(Database, "/devices/abc123/temperature/current"));
+      const data = await get(ref(Database, "/devices/abc123/humidity/current"));
       // if (data.exists()) {
       //   console.log(data.val());
       // } else {
@@ -170,9 +170,9 @@ export default function ComparativeGraph(props) {
           return info;
         }
       });
-      console.log("====================================");
-      console.log(updatedInfo);
-      console.log("====================================");
+      // console.log("====================================");
+      // console.log(updatedInfo);
+      // console.log("====================================");
       setCurrent(updatedInfo);
       if (updatedInfo[5].y > props.maximumValue) {
         sendPushNotification(
@@ -253,7 +253,7 @@ export default function ComparativeGraph(props) {
               return index < day.length ? { x: day[index].x, y: dataDay[index].y, z: day[index].y } : null
             })
             setInfo(newInfo);
-            setGraphDomain({ y: [0, 40], x: [0, 7] })
+            setGraphDomain({ y: [0, 100], x: [0, 7] })
             setGraphTickCount({ x: 5, y: 10 })
           }}
 
@@ -269,7 +269,7 @@ export default function ComparativeGraph(props) {
               return index < day.length ? { x: ele.x, y: dataDay[index].y, z: ele.y } : null
             })
             setInfo(newInfo);
-            setGraphDomain({ y: [0, 40], x: [0, 23] })
+            setGraphDomain({ y: [0, 100], x: [0, 23] })
             // setGraphTickCount({ x: 6, y: 10 })
           }}
           style={[styles.buttonElement, { backgroundColor: activeBtn === "day" ? "#155694" : "white", }]}>
@@ -283,7 +283,7 @@ export default function ComparativeGraph(props) {
             return index < week.length ? { x: week[index].x, y: dataDay[index].y, z: week[index].y } : null
           }).slice(0, week.length);
           setInfo(newInfo);
-          setGraphDomain({ y: [0, 40], x: [newInfo[0].x, newInfo[newInfo.length - 1].x] })
+          setGraphDomain({ y: [0, 100], x: [newInfo[0].x, newInfo[newInfo.length - 1].x] })
           setGraphTickCount({ x: 7, y: 10 })
         }}
           style={[styles.buttonElement, { backgroundColor: activeBtn === "week" ? "#155694" : "white", }]}>

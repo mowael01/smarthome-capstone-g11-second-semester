@@ -1,9 +1,9 @@
 import { View, Text, TextInput, SafeAreaView, StyleSheet } from "react-native";
 import React from "react";
-import ComparativeGraph from "../components/temperatureGraph";
+import ComparativeGraph from "../components/gasG";
 
 
-export default function Temperature() {
+export default function Gas() {
 
 
   return (
