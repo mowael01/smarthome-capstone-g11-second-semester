@@ -169,7 +169,7 @@ export default function Home({ navigation }) {
           </View>
           <Data
             text="Gas conc"
-            maximumValue={300}
+            maximumValue={200}
             maximumValueMessage={{
               title: "High Gas Concentration Detected 🚨🚨",
               body: "Please Take action"
