@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "smart_house_feed",
+    "name": "SmartRice Dwelling",
     "slug": "smart_house_feed",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -21,7 +21,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.mo_wael.smart_house_feed"
+      "package": "com.mo_wael.smartrice"
     },
     "web": {
       "favicon": "./assets/favicon.png"
