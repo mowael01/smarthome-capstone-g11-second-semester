@@ -8,7 +8,7 @@ export default function Temperature() {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <ComparativeGraph />
+      <ComparativeGraph maximumValue={35} maximumValueMessage={{ title: "High Temperature Detected 🔥🔥", body: "Please Take action" }} />
     </SafeAreaView>
   );
 }

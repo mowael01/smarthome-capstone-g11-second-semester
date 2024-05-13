@@ -8,7 +8,12 @@ export default function Humidity() {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <ComparativeGraph />
+      <ComparativeGraph
+        maximumValue={75}
+        maximumValueMessage={{
+          title: "High Humidity Detected 💦💦",
+          body: "Please Take action"
+        }} />
     </SafeAreaView>
   );
 }

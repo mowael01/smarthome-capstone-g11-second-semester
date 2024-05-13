@@ -54,6 +54,7 @@ async function registerForPushNotificationsAsync() {
 export default function App() {
   const [user, setUser] = React.useState<Object>();
   React.useEffect(() => {
+    //@ts-ignore
     onAuthStateChanged(FirebaseAUTH, (user) => {
       setUser(user);
     });
@@ -61,7 +62,7 @@ export default function App() {
   registerForPushNotificationsAsync();
   return (
     <NavigationContainer>
-      {user ? <HomeStack /> : <HomeStack />}
+      {user ? <HomeStack /> : <LoginStack />}
     </NavigationContainer>
   );
 }

@@ -5,6 +5,10 @@ import HomeMap from "../pages/homeMap";
 import Settings from "../pages/settings";
 import Syncing from "../pages/syncing";
 import Temperature from "../pages/temperature";
+import Humidity from "../pages/humidity";
+import Light from "../pages/light";
+import Gas from "../pages/gas";
+
 
 const Tab = createNativeStackNavigator();
 
@@ -19,17 +23,28 @@ export default function App() {
       <Tab.Screen
         name="Temperature"
         component={Temperature}
-        // options={{ headerShown: false }}
+      // options={{ headerShown: false }}
+      />
+      <Tab.Screen
+        name="Humidity"
+        component={Humidity}
+      />
+      <Tab.Screen
+        name="Gas"
+        component={Gas}
+
+      />
+      <Tab.Screen
+        name="Light"
+        component={Light}
       />
       <Tab.Screen
         name="Syncing"
         component={Syncing}
-        // options={{ tabBarIcon: makeIconRender("cog"/) }}
       />
       <Tab.Screen
         name="Settings"
         component={Settings}
-        // options={{ tabBarIcon: makeIconRender("cog") }}
       />
     </Tab.Navigator>
   );

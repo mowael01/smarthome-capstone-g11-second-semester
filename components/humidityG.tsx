@@ -133,20 +133,19 @@ export default function ComparativeGraph(props) {
           .then(data => {
             // setCurrent(data.current);
             const newDay = data.forecast.forecastday[0].hour.map(ele => {
-              return ({ x: +ele.time.slice(-5, -3), y: +ele.temp_c }) //[ele.time.slice(-5),ele]
+              return ({ x: +ele.time.slice(-5, -3), y: +ele.humidity }) //[ele.time.slice(-5),ele]
             });
             setDay(newDay);
             const newInfo = info.map((ele, index) => {
               return { x: ele.x, y: +newD[index].y, z: newDay[index].y }
             });
-            console.log("test" + newInfo);
 
             setInfo(newInfo)
-            console.log(`day:`);
-            console.log(newInfo);
             const newWeek = data.forecast.forecastday.map(ele => {
-              return ({ x: +ele.date.slice(-2), y: ele.day.avgtemp_c }) //[ele.time.slice(-5),ele]
+              return ({ x: +ele.date.slice(-2), y: ele.hour.reduce((acc, current, index) => { return index === 0 ? +current.humidity : (+current.humidity + acc) / 2 }) })
             });
+            console.log(newWeek);
+
             setWeek(newWeek)
           })
       })
@@ -170,9 +169,6 @@ export default function ComparativeGraph(props) {
           return info;
         }
       });
-      // console.log("====================================");
-      // console.log(updatedInfo);
-      // console.log("====================================");
       setCurrent(updatedInfo);
       if (updatedInfo[5].y > props.maximumValue) {
         sendPushNotification(
@@ -249,10 +245,6 @@ export default function ComparativeGraph(props) {
         <TouchableOpacity
           onPress={() => {
             setActiveBtn("now");
-            const newInfo = day.map((ele, index) => {
-              return index < day.length ? { x: day[index].x, y: dataDay[index].y, z: day[index].y } : null
-            })
-            setInfo(newInfo);
             setGraphDomain({ y: [0, 100], x: [0, 7] })
             setGraphTickCount({ x: 5, y: 10 })
           }}
@@ -293,18 +285,72 @@ export default function ComparativeGraph(props) {
         </TouchableOpacity>
       </View>
       <View>
-        <Text>
-          Avg Temperature inside: {
-            day.reduce((accumulator, current, index) => {
-              // console.log(accumulator);
+        <Text style={styles.textDetail}>
+          Avg Now Humidity inside: {
+            current.reduce((accumulator, current, index) => {
               if (index === 0) {
                 return current.y;
               } else {
                 return (accumulator + current.y) / 2;
               }
             }, 0).toFixed(2)
-          }&deg;C
+          }%
         </Text>
+        <Text style={styles.textDetail}>
+          Avg Day Humidity inside: {
+            dataDay.reduce((accumulator, current, index) => {
+              if (index === 0) {
+                return current.y;
+              } else {
+                return (accumulator + current.y) / 2;
+              }
+            }, 0).toFixed(2)
+          }%
+        </Text>
+        <Text style={styles.textDetail}>
+          Maximum Day Humidity Inside: {
+            dataDay.reduce((accumulator, current) => {
+              if (current.y > accumulator) {
+                return current.y;
+              } else {
+                return accumulator
+              }
+            }, 0).toFixed(2)
+          }%
+        </Text>
+        <Text style={styles.textDetail}>
+          Minimum Day Humidity Inside: {
+            Math.min(...dataDay.map(ele => +ele.y)).toFixed(2)
+          }%
+        </Text>
+        <Text style={styles.textDetail}>
+          Avg Day Humidity Outside: {
+            day.reduce((accumulator, current, index) => {
+              if (index === 0) {
+                return current.y;
+              } else {
+                return (accumulator + current.y) / 2;
+              }
+            }, 0).toFixed(2)
+          }%
+        </Text>
+        <Text style={styles.textDetail}>
+          Maximum Day Humidity Outside: {
+            day.reduce((accumulator, current) => {
+              if (current.y > accumulator) {
+                return current.y;
+              } else {
+                return accumulator
+              }
+            }, 0).toFixed(2)
+          }%
+        </Text>
+        <Text style={styles.textDetail}>
+          Minimum Day Humidity Outside: {
+            Math.min(...day.map(ele => +ele.y)).toFixed(2)
+          }%
+        </Text>
+
       </View>
     </SafeAreaView>
   );
@@ -460,5 +506,12 @@ const styles = StyleSheet.create({
   },
   buttonElementText: {
     // color: "black"
+  },
+  textDetail: {
+    color: "",
+    fontSize: 15,
+    padding: 10,
+    borderBottomColor: "black",
+    borderBottomWidth: 0.25
   }
 });

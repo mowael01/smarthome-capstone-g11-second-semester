@@ -82,30 +82,30 @@ export default function ComparativeGraph(props) {
   const [dataDay, setDataDay] = React.useState([])
   // const [dataWeek, setDataWeek] = React.useState([])
   const [info, setInfo] = React.useState([
-    { x: 0, y: 1, z: 2 }, //0
-    { x: 1, y: 1, z: 2 }, //1
-    { x: 2, y: 1, z: 2 }, //2
-    { x: 3, y: 1, z: 2 }, //3
-    { x: 4, y: 1, z: 2 }, //4
-    { x: 5, y: 1, z: 2 }, //5
-    { x: 6, y: 1, z: 2 }, //0
-    { x: 7, y: 1, z: 2 }, //1
-    { x: 8, y: 1, z: 2 }, //2
-    { x: 9, y: 1, z: 2 }, //3
-    { x: 10, y: 1, z: 2 }, //4
-    { x: 11, y: 1, z: 2 }, //5
-    { x: 12, y: 1, z: 2 }, //0
-    { x: 13, y: 1, z: 2 }, //1
-    { x: 14, y: 1, z: 2 }, //2
-    { x: 15, y: 1, z: 2 }, //3
-    { x: 16, y: 1, z: 2 }, //4
-    { x: 17, y: 1, z: 2 }, //5
-    { x: 18, y: 1, z: 2 }, //0
-    { x: 19, y: 1, z: 2 }, //1
-    { x: 20, y: 1, z: 2 }, //2
-    { x: 21, y: 1, z: 2 }, //3
-    { x: 22, y: 1, z: 2 }, //4
-    { x: 23, y: 1, z: 2 }, //5
+    { x: 0, y: 1, }, //0
+    { x: 1, y: 1, }, //1
+    { x: 2, y: 1, }, //2
+    { x: 3, y: 1, }, //3
+    { x: 4, y: 1, }, //4
+    { x: 5, y: 1, }, //5
+    { x: 6, y: 1, }, //0
+    { x: 7, y: 1, }, //1
+    { x: 8, y: 1, }, //2
+    { x: 9, y: 1, }, //3
+    { x: 10, y: 1, }, //4
+    { x: 11, y: 1, }, //5
+    { x: 12, y: 1, }, //0
+    { x: 13, y: 1, }, //1
+    { x: 14, y: 1, }, //2
+    { x: 15, y: 1, }, //3
+    { x: 16, y: 1, }, //4
+    { x: 17, y: 1, }, //5
+    { x: 18, y: 1, }, //0
+    { x: 19, y: 1, }, //1
+    { x: 20, y: 1, }, //2
+    { x: 21, y: 1, }, //3
+    { x: 22, y: 1, }, //4
+    { x: 23, y: 1, }, //5
 
 
   ]);
@@ -121,47 +121,25 @@ export default function ComparativeGraph(props) {
         });
         newD = newD.sort((a, b) => a.x - b.x)
         console.log(newD);
-        // setInfo(newD);
         setDataDay(newD)
         return newD
       })
       .then((newD) => {
-        fetch(
-          "https://api.weatherapi.com/v1/forecast.json?key=4b9054e1f4214ea9913140905242504&q=cairo&days=7&aqi=no&alerts=no"
-        )
-          .then(data => data.json())
-          .then(data => {
-            // setCurrent(data.current);
-            const newDay = data.forecast.forecastday[0].hour.map(ele => {
-              return ({ x: +ele.time.slice(-5, -3), y: +ele.temp_c }) //[ele.time.slice(-5),ele]
-            });
-            setDay(newDay);
-            const newInfo = info.map((ele, index) => {
-              return { x: ele.x, y: +newD[index].y, z: newDay[index].y }
-            });
-            console.log("test" + newInfo);
+        // setCurrent(data.current);
+        const newInfo = info.map((ele, index) => {
+          return { x: ele.x, y: +newD[index].y, }
+        });
+        console.log("test" + newInfo);
 
-            setInfo(newInfo)
-            console.log(`day:`);
-            console.log(newInfo);
-            const newWeek = data.forecast.forecastday.map(ele => {
-              return ({ x: +ele.date.slice(-2), y: ele.day.avgtemp_c }) //[ele.time.slice(-5),ele]
-            });
-            setWeek(newWeek)
-          })
+        setInfo(newInfo)
       })
+
   }, [])
 
   React.useEffect(() => {
     setTimeout(async () => {
       // @ts-ignore
       const data = await get(ref(Database, "/devices/abc123/gas/current"));
-      // if (data.exists()) {
-      //   console.log(data.val());
-      // } else {
-      //   console.log("No data available");
-      // }
-      // Create a new array with updated data
       let updatedInfo = [...current.slice(1), { x: 6, y: data.val(), z: 0 }];
 
       updatedInfo = updatedInfo.map((info) => {
@@ -170,9 +148,6 @@ export default function ComparativeGraph(props) {
           return info;
         }
       });
-      // console.log("====================================");
-      // console.log(updatedInfo);
-      // console.log("====================================");
       setCurrent(updatedInfo);
       if (updatedInfo[5].y > props.maximumValue) {
         sendPushNotification(
@@ -191,7 +166,7 @@ export default function ComparativeGraph(props) {
           // @ts-ignore
           domain={graphDomain}
           xKey="x"
-          yKeys={["y", "z"]}
+          yKeys={["y"]}
           chartPressState={[firstTouch]}
           axisOptions={{
             font,
@@ -211,11 +186,9 @@ export default function ComparativeGraph(props) {
               {isFirstPressActive ? <ActiveValueIndicator
                 xPosition={firstTouch.x.position}
                 yPosition={firstTouch.y.y.position}
-                zPosition={firstTouch.y.z.position}
                 bottom={chartBounds.bottom}
                 top={chartBounds.top}
                 activeValueY={firstTouch.y.y.value}
-                activeValueZ={firstTouch.y.z.value}
                 valueX={firstTouch.x}
                 textColor={"red"}
                 lineColor={"#F0ED00"}
@@ -227,13 +200,6 @@ export default function ComparativeGraph(props) {
         >
           {({ chartBounds, points }) => (
             <>
-              <CustomArea
-                color="#1E2F3F"
-                points={points.z}
-                startX={firstTouch.x.position}
-                {...chartBounds}
-
-              />
               <CustomArea
                 color="#0005DB"
                 points={points.y}
@@ -249,10 +215,6 @@ export default function ComparativeGraph(props) {
         <TouchableOpacity
           onPress={() => {
             setActiveBtn("now");
-            const newInfo = day.map((ele, index) => {
-              return index < day.length ? { x: day[index].x, y: dataDay[index].y, z: day[index].y } : null
-            })
-            setInfo(newInfo);
             setGraphDomain({ y: [0, 1000], x: [0, 7] })
             setGraphTickCount({ x: 5, y: 10 })
           }}
@@ -265,12 +227,11 @@ export default function ComparativeGraph(props) {
         <TouchableOpacity
           onPress={() => {
             setActiveBtn("day");
-            const newInfo = day.map((ele, index) => {
-              return index < day.length ? { x: ele.x, y: dataDay[index].y, z: ele.y } : null
+            const newInfo = dataDay.map((ele, index) => {
+              return index < dataDay.length ? { x: ele.x, y: dataDay[index].y } : null
             })
-            setInfo(newInfo);
+            setInfo(newInfo)
             setGraphDomain({ y: [0, 1000], x: [0, 23] })
-            // setGraphTickCount({ x: 6, y: 10 })
           }}
           style={[styles.buttonElement, { backgroundColor: activeBtn === "day" ? "#155694" : "white", }]}>
           <Text style={{ color: activeBtn === "day" ? "white" : "black", }}>
@@ -293,17 +254,43 @@ export default function ComparativeGraph(props) {
         </TouchableOpacity>
       </View>
       <View>
-        <Text>
-          Avg Temperature inside: {
-            day.reduce((accumulator, current, index) => {
-              // console.log(accumulator);
+        <Text style={styles.textDetail}>
+          Avg Now gas inside: {
+            current.reduce((accumulator, current, index) => {
               if (index === 0) {
                 return current.y;
               } else {
                 return (accumulator + current.y) / 2;
               }
             }, 0).toFixed(2)
-          }&deg;C
+          }ppm
+        </Text>
+        <Text style={styles.textDetail}>
+          Avg Day Gas inside: {
+            dataDay.reduce((accumulator, current, index) => {
+              if (index === 0) {
+                return current.y;
+              } else {
+                return (accumulator + current.y) / 2;
+              }
+            }, 0).toFixed(2)
+          }ppm
+        </Text>
+        <Text style={styles.textDetail}>
+          Maximum Day Gas Inside: {
+            dataDay.reduce((accumulator, current) => {
+              if (current.y > accumulator) {
+                return current.y;
+              } else {
+                return accumulator
+              }
+            }, 0).toFixed(2)
+          }ppm
+        </Text>
+        <Text style={styles.textDetail}>
+          Minimum Day Gas Inside: {
+            Math.min(...dataDay.map(ele => +ele.y)).toFixed(2)
+          }ppm
         </Text>
       </View>
     </SafeAreaView>
@@ -356,12 +343,10 @@ const CustomArea = ({
 const ActiveValueIndicator = ({
   xPosition,
   yPosition,
-  zPosition,
   top,
   bottom,
   valueX,
   activeValueY,
-  activeValueZ,
   textColor,
   lineColor,
   indicatorColor,
@@ -369,10 +354,8 @@ const ActiveValueIndicator = ({
 }: {
   xPosition: SharedValue<number>;
   yPosition: SharedValue<number>;
-  zPosition: SharedValue<number>;
   valueX: any;
   activeValueY: SharedValue<number>;
-  activeValueZ: SharedValue<number>;
   bottom: number;
   top: number;
   textColor: string;
@@ -389,7 +372,7 @@ const ActiveValueIndicator = ({
 
   // Text label
   const activeValueDisplay = useDerivedValue(
-    () => `Inside: ${activeValueY.value.toFixed(2)}C, Outside: ${activeValueZ.value.toFixed(2)} at ${xPosition.value}:00`,
+    () => `Inside: ${activeValueY.value.toFixed(2)}ppm`,
   );
   const activeValueWidth = useDerivedValue(
     () => font?.getTextWidth(activeValueDisplay.value) || 0,
@@ -398,9 +381,6 @@ const ActiveValueIndicator = ({
   const activeValueX = useDerivedValue(
     () => xPosition.value - activeValueWidth.value / 2,
   );
-
-
-
   return (
     <>
       <SkiaLine p1={start} p2={end} color={lineColor} strokeWidth={1} />
@@ -408,13 +388,6 @@ const ActiveValueIndicator = ({
       <Circle
         cx={xPosition}
         cy={yPosition}
-        r={4}
-        color="hsla(0, 0, 100%, 0.25)"
-      />
-      <Circle cx={xPosition} cy={zPosition} r={6} color={indicatorColor} />
-      <Circle
-        cx={xPosition}
-        cy={zPosition}
         r={4}
         color="hsla(0, 0, 100%, 0.25)"
       />
@@ -460,5 +433,12 @@ const styles = StyleSheet.create({
   },
   buttonElementText: {
     // color: "black"
+  },
+  textDetail: {
+    color: "",
+    fontSize: 15,
+    padding: 10,
+    borderBottomColor: "black",
+    borderBottomWidth: 0.25
   }
 });

@@ -8,7 +8,9 @@ export default function Gas() {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <ComparativeGraph />
+      <ComparativeGraph
+        maximumValue={300}
+        maximumValueMessage={{ title: "High Gas Concentration Detected 🚨🚨", body: "Please Take action" }} />
     </SafeAreaView>
   );
 }

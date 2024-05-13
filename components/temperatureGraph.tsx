@@ -38,7 +38,6 @@ import { getAuth } from "firebase/auth";
 import * as Notifications from "expo-notifications";
 
 
-
 export default function ComparativeGraph(props) {
   const font = useFont(require("../assets/fonts/Nunito-Italic-VariableFont_wght.ttf"), 12)
   const { state: firstTouch, isActive: isFirstPressActive } =
@@ -156,12 +155,6 @@ export default function ComparativeGraph(props) {
     setTimeout(async () => {
       // @ts-ignore
       const data = await get(ref(Database, "/devices/abc123/temperature/current"));
-      // if (data.exists()) {
-      //   console.log(data.val());
-      // } else {
-      //   console.log("No data available");
-      // }
-      // Create a new array with updated data
       let updatedInfo = [...current.slice(1), { x: 6, y: data.val(), z: 0 }];
 
       updatedInfo = updatedInfo.map((info) => {
@@ -170,9 +163,6 @@ export default function ComparativeGraph(props) {
           return info;
         }
       });
-      console.log("====================================");
-      console.log(updatedInfo);
-      console.log("====================================");
       setCurrent(updatedInfo);
       if (updatedInfo[5].y > props.maximumValue) {
         sendPushNotification(
@@ -293,10 +283,9 @@ export default function ComparativeGraph(props) {
         </TouchableOpacity>
       </View>
       <View>
-        <Text>
-          Avg Temperature inside: {
-            day.reduce((accumulator, current, index) => {
-              // console.log(accumulator);
+        <Text style={styles.textDetail}>
+          Avg Now Temperature inside: {
+            current.reduce((accumulator, current, index) => {
               if (index === 0) {
                 return current.y;
               } else {
@@ -305,7 +294,63 @@ export default function ComparativeGraph(props) {
             }, 0).toFixed(2)
           }&deg;C
         </Text>
+        <Text style={styles.textDetail}>
+          Avg Day Temperature inside: {
+            dataDay.reduce((accumulator, current, index) => {
+              if (index === 0) {
+                return current.y;
+              } else {
+                return (accumulator + current.y) / 2;
+              }
+            }, 0).toFixed(2)
+          }&deg;C
+        </Text>
+        <Text style={styles.textDetail}>
+          Maximum Day Temperature Inside: {
+            dataDay.reduce((accumulator, current) => {
+              if (current.y > accumulator) {
+                return current.y;
+              } else {
+                return accumulator
+              }
+            }, 0).toFixed(2)
+          }&deg;C
+        </Text>
+        <Text style={styles.textDetail}>
+          Minimum Day Temperature Inside: {
+            Math.min(...dataDay.map(ele => +ele.y)).toFixed(2)
+          }&deg;C
+        </Text>
+        <Text style={styles.textDetail}>
+          Avg Day Temperature Outside: {
+            day.reduce((accumulator, current, index) => {
+              if (index === 0) {
+                return current.y;
+              } else {
+                return (accumulator + current.y) / 2;
+              }
+            }, 0).toFixed(2)
+          }&deg;C
+        </Text>
+        <Text style={styles.textDetail}>
+          Maximum Day Temperature Outside: {
+            day.reduce((accumulator, current) => {
+              if (current.y > accumulator) {
+                return current.y;
+              } else {
+                return accumulator
+              }
+            }, 0).toFixed(2)
+          }&deg;C
+        </Text>
+        <Text style={styles.textDetail}>
+          Minimum Day Temperature Outside: {
+            Math.min(...day.map(ele => +ele.y)).toFixed(2)
+          }&deg;C
+        </Text>
+
       </View>
+
     </SafeAreaView>
   );
 }
@@ -460,5 +505,12 @@ const styles = StyleSheet.create({
   },
   buttonElementText: {
     // color: "black"
+  },
+  textDetail: {
+    color: "",
+    fontSize: 15,
+    padding: 10,
+    borderBottomColor: "black",
+    borderBottomWidth: 0.25
   }
 });

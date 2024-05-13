@@ -6,13 +6,11 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React from "react";
-import Graph from "../components/testGraph";
 import { Database } from "../firebaseConfig";
 import * as Notifications from "expo-notifications";
 
 import { get, ref } from "firebase/database";
 
-//Synced data components of firebase
 const Data = (props) => {
   async function sendPushNotification(title, body) {
     await Notifications.scheduleNotificationAsync({
@@ -24,8 +22,6 @@ const Data = (props) => {
       trigger: null,
     });
   }
-  // sendPushNotification("hi", "all is right");
-  // const userEmail = getAuth().currentUser.email.slice(0, -4);
   const [avg, setAvg] = React.useState(0);
   const [info, setInfo] = React.useState([
     { x: 0, y: 1 }, //0
@@ -36,7 +32,7 @@ const Data = (props) => {
     { x: 5, y: 1 }, //5
   ]); // the data component will take the average of the lst 6 readings
   // @ts-ignore
-  const dataRef = ref(Database, "/test/" + props.database); // userEmail + "/homeData/" + props.database
+  const dataRef = ref(Database, "/devices/abc123/" + props.database + "/current"); // userEmail + "/homeData/" + props.database
   // getting the data from the database every 1 second
   React.useEffect(() => {
     setTimeout(async () => {
@@ -71,8 +67,11 @@ const Data = (props) => {
             props.maximumValueMessage.body
           );
         }
+      } else {
+        console.log("Data not found");
+
       }
-    }, 2000); // Changed to 1000 milliseconds for 1 second intervals
+    }, 1000); // Changed to 1000 milliseconds for 1 second intervals
   }, [info]);
   return (
     <View style={styles.summaryElement}>
@@ -83,10 +82,10 @@ const Data = (props) => {
           fontSize: 25,
         }}
       >
-        {avg.toFixed(2)}
+        {avg < 100 ? avg.toFixed(2) : avg.toFixed(0)}
         {props.unit}
       </Text>
-      <Text style={{ color: "white" }}>Avg House Temp</Text>
+      <Text style={{ color: "white" }}>{props.text}</Text>
     </View>
   );
 };
@@ -95,17 +94,6 @@ export default function Home({ navigation }) {
   const [OTemperature, setOTemperature] = React.useState(0);
   const temperature = 0;
   const [OHumi, setOHumi] = React.useState(0);
-  async function schedulePushNotification() {
-    await Notifications.scheduleNotificationAsync({
-      content: {
-        title: "this is a notification from the home page",
-        body: "Here is the notification body",
-        data: { data: "goes here" },
-      },
-      trigger: { seconds: 1 },
-    });
-  }
-  // schedulePushNotification();
   fetch(
     "http://api.weatherapi.com/v1/current.json?key=4b9054e1f4214ea9913140905242504&q=cairo&aqi=no"
   )
@@ -127,7 +115,7 @@ export default function Home({ navigation }) {
         <View
           style={{
             width: 310,
-            height: 200,
+            height: 300,
             backgroundColor: "#cccccc",
             borderRadius: 15,
             overflow: "hidden",
@@ -137,13 +125,13 @@ export default function Home({ navigation }) {
           }}
         >
           <Data
-            maximumValue={30}
+            text={"Avg House Temp"}
+            maximumValue={35}
             maximumValueMessage={{
-              title: "الجو حر اويييي",
-              body: "شغل التكييف يسطا ولا المروحة هنمووت",
+              title: "High Temperature Detected 🔥🔥",
+              body: "Please Take action"
             }}
-            unit="&deg;C"
-            database="TemperatureC"
+            database="temperature"
           />
           <View style={styles.summaryElement}>
             <Text
@@ -158,12 +146,13 @@ export default function Home({ navigation }) {
             <Text style={{ color: "white" }}>Outside Temp</Text>
           </View>
           <Data
+            text="Avg House Humidity"
+            maximumValue={75}
             maximumValueMessage={{
-              title: "الجو رطب اوي",
-              body: "هنمووووت",
+              title: "High Humidity Detected 💦💦",
+              body: "Please Take action"
             }}
-            maximumValue={80}
-            database="Humidity"
+            database="humidity"
             unit="%"
           />
           <View style={styles.summaryElement}>
@@ -178,6 +167,21 @@ export default function Home({ navigation }) {
             </Text>
             <Text style={{ color: "white" }}>Ouside Humidity</Text>
           </View>
+          <Data
+            text="Gas conc"
+            maximumValue={300}
+            maximumValueMessage={{
+              title: "High Gas Concentration Detected 🚨🚨",
+              body: "Please Take action"
+            }}
+            database="gas"
+            unit="ppm"
+          />
+          <Data
+            text="Outside Luminosity"
+            database="light"
+            unit=" Lux"
+          />
         </View>
       </View>
       <View style={styles.sectionContainer}>
@@ -199,13 +203,24 @@ export default function Home({ navigation }) {
           >
             <Text style={styles.featuresElementText}>Temperature</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.featuresElement}>
+          <TouchableOpacity
+            style={styles.featuresElement} onPress={() => {
+              navigation.navigate("Humidity");
+            }}>
             <Text style={styles.featuresElementText}>Humidity</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.featuresElement}>
+          <TouchableOpacity
+            style={styles.featuresElement}
+            onPress={() => {
+              navigation.navigate("Gas");
+            }}>
             <Text style={styles.featuresElementText}>Gas</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.featuresElement}>
+          <TouchableOpacity
+            style={styles.featuresElement}
+            onPress={() => {
+              navigation.navigate("Light");
+            }}>
             <Text style={styles.featuresElementText}>Light</Text>
           </TouchableOpacity>
         </View>
@@ -222,40 +237,6 @@ export default function Home({ navigation }) {
           }}
         ></View>
       </View>
-      {/* <View style={styles.graph}>
-        <ScrollView style={{ marginBottom: 40 }}>
-          <Graph
-            name="TemperatureC"
-            unit="&deg;C"
-            database="TemperatureC"
-            maximumValue={30}
-            maximumValueMessage={{
-              title: "Temperature is too high",
-              body: "Temperature is too high"
-            }}
-          />
-          <Graph
-            name="Humidity"
-            unit="%"
-            database="Humidity"
-            maximumValue={70}
-            maximumValueMessage={{
-              title: "Humidity is too high",
-              body: "Humidity is too high"
-            }}
-          />
-          <Graph
-            name="Gas"
-            unit="ppm"
-            database="gas"
-            maximumValue={700}
-            maximumValueMessage={{
-              title: "البيت بيولع",
-              body: "البيت بيولع الحق نفسك بسررررعة🔥🔥🔥"
-            }}
-          />
-        </ScrollView>
-      </View> */}
     </SafeAreaView>
   );
 }
