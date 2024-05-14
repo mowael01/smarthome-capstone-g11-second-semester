@@ -6,7 +6,6 @@ import HomeStack from "./routers/HomeStack";
 import { onAuthStateChanged } from "firebase/auth";
 import { FirebaseAUTH } from "./firebaseConfig";
 import * as Notifications from "expo-notifications";
-import Constants from "expo-constants"; // Optional
 import { Platform } from "react-native";
 
 Notifications.setNotificationHandler({
@@ -18,7 +17,7 @@ Notifications.setNotificationHandler({
 });
 async function registerForPushNotificationsAsync() {
   let token;
-  if (Constants.isDevice) {
+  if (true) {
     const { status: existingStatus } =
       await Notifications.getPermissionsAsync();
     let finalStatus = existingStatus;
