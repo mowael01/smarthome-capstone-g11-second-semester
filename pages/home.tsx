@@ -180,7 +180,7 @@ export default function Home({ navigation }) {
           <Data
             text="Outside Luminosity"
             database="light"
-            unit=" Lux"
+            unit=" %"
           />
         </View>
       </View>

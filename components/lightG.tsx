@@ -270,7 +270,7 @@ export default function ComparativeGraph(props) {
                 return (accumulator + current.y) / 2;
               }
             }, 0).toFixed(2)
-          } Lux
+          } %
         </Text>
         <Text style={styles.textDetail}>
           Avg Day Gas inside: {
@@ -281,7 +281,7 @@ export default function ComparativeGraph(props) {
                 return (accumulator + current.y) / 2;
               }
             }, 0).toFixed(2)
-          } Lux
+          } %
         </Text>
         <Text style={styles.textDetail}>
           Maximum Day Gas Inside: {
@@ -292,12 +292,12 @@ export default function ComparativeGraph(props) {
                 return accumulator
               }
             }, 0).toFixed(2)
-          } Lux
+          } %
         </Text>
         <Text style={styles.textDetail}>
           Minimum Day Gas Inside: {
             Math.min(...dataDay.map(ele => +ele.y)).toFixed(2)
-          } Lux
+          } %
         </Text>
       </View>
     </SafeAreaView>
